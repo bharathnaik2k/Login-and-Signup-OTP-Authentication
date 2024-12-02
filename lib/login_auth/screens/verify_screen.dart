@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:login_auth/login_auth/api/api_address.dart';
+import 'package:login_auth/login_auth/screens/home_screen.dart';
 import 'package:pinput/pinput.dart';
 
 class MyApp extends StatelessWidget {
@@ -40,34 +42,37 @@ class PinputExample extends StatefulWidget {
 }
 
 class _PinputExampleState extends State<PinputExample> {
-  late final TextEditingController pinController;
-  late final FocusNode focusNode;
-  late final GlobalKey<FormState> formKey;
+  TextEditingController pinController = TextEditingController();
 
   verifyOTP() async {
     var url = "$baseUrl$verifyURL";
     var uri = Uri.parse(url);
     var response = await http.post(
       uri,
-      body:
-          jsonEncode({"phone_number": "+91${widget.mobileNumber.toString()}"}),
+      body: jsonEncode({
+        "phone_number": "+91${widget.mobileNumber.toString()}",
+        "otp": pinController.text.toString()
+      }),
     );
+    print(jsonDecode(response.body).toString());
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      var decode = jsonDecode(response.body);
+      var token = decode['data']['token'];
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      var id = decodedToken['sub'];
+      setState(() {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => HomeScreen(
+            id: id.toString(),
+          ),
+        ));
+      });
+    } else {
+      var snackBar = const SnackBar(content: Text('invild OTP'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   formKey = GlobalKey<FormState>();
-  //   pinController = TextEditingController();
-  //   focusNode = FocusNode();
-  // }
-
-  // @override
-  // void dispose() {
-  //   pinController.dispose();
-  //   focusNode.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -89,27 +94,18 @@ class _PinputExampleState extends State<PinputExample> {
     );
 
     return Form(
-      key: formKey,
+      // key: formKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const Text("Enter Your OTP"),
+          const SizedBox(height: 18),
           Directionality(
             textDirection: TextDirection.ltr,
             child: Pinput(
               controller: pinController,
-              focusNode: focusNode,
               defaultPinTheme: defaultPinTheme,
               separatorBuilder: (index) => const SizedBox(width: 8),
-              validator: (value) {
-                return value == '22222' ? null : 'Pin is incorrect';
-              },
-              hapticFeedbackType: HapticFeedbackType.lightImpact,
-              onCompleted: (pin) {
-                debugPrint('onCompleted: $pin');
-              },
-              onChanged: (value) {
-                debugPrint('onChanged: $value');
-              },
               cursor: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -145,8 +141,14 @@ class _PinputExampleState extends State<PinputExample> {
               backgroundColor: MaterialStatePropertyAll(Colors.blue),
             ),
             onPressed: () {
-              focusNode.unfocus();
-              formKey.currentState!.validate();
+              if (pinController.text.length == 4) {
+                setState(() {
+                  verifyOTP();
+                });
+              } else {
+                var snackBar = const SnackBar(content: Text('Enter Valid OTP'));
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
             },
             child: const Text(
               '  Validate  ',

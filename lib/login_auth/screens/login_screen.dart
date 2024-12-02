@@ -125,9 +125,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   backgroundColor: const MaterialStatePropertyAll(Colors.blue),
                 ),
                 onPressed: () {
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //   builder: (context) =>  MyApp(),
-                  // ));
                   FocusManager.instance.primaryFocus?.unfocus();
                   setState(() {
                     mobileNumber.length == 10 ? logIN() : fillNumberErorr();
