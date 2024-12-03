@@ -25,16 +25,16 @@ class _LoginScreenState extends State<LoginScreen> {
       uri,
       body: jsonEncode({"phone_number": "+91${mobileNumber.text.toString()}"}),
     );
-
+    log("Status code : ${response.statusCode.toString()}");
     if (response.statusCode == 201) {
       setState(() {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => MyApp(
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => OTPVerifyScreen(
             mobileNumber: mobileNumber.text.toString(),
           ),
         ));
       });
-      var snackBar = const SnackBar(content: Text('OTP Sent Succesfull'));
+      var snackBar = const SnackBar(content: Text('OTP Sent Successfull'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else if (response.statusCode == 400) {
       var snackBar =
@@ -49,21 +49,6 @@ class _LoginScreenState extends State<LoginScreen> {
   fillNumberErorr() {
     var snackBar = const SnackBar(content: Text('Enter The Correct Number'));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  getUserData(String token, profileId) async {
-    var url = "https://api.yes-me.com/users/details";
-    var uri = Uri.parse(url);
-
-    var response = await http.get(
-      uri,
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-    );
-    var userdata = response.body;
-    print(userdata.toString());
-    log(userdata.toString());
   }
 
   @override

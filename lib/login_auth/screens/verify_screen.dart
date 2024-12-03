@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -7,9 +8,9 @@ import 'package:login_auth/login_auth/api/api_address.dart';
 import 'package:login_auth/login_auth/screens/home_screen.dart';
 import 'package:pinput/pinput.dart';
 
-class MyApp extends StatelessWidget {
+class OTPVerifyScreen extends StatelessWidget {
   final String? mobileNumber;
-  const MyApp({super.key, required this.mobileNumber});
+  const OTPVerifyScreen({super.key, required this.mobileNumber});
 
   @override
   Widget build(BuildContext context) {
@@ -54,22 +55,19 @@ class _PinputExampleState extends State<PinputExample> {
         "otp": pinController.text.toString()
       }),
     );
-    print(jsonDecode(response.body).toString());
-    print(response.statusCode);
+    log("Status code : ${response.statusCode.toString()}");
     if (response.statusCode == 200) {
       var decode = jsonDecode(response.body);
       var token = decode['data']['token'];
       Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
       var id = decodedToken['sub'];
       setState(() {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HomeScreen(
-            id: id.toString(),
-          ),
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => HomeScreen(id: id.toString()),
         ));
       });
     } else {
-      var snackBar = const SnackBar(content: Text('invild OTP'));
+      var snackBar = const SnackBar(content: Text('Invild OTP'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
@@ -94,7 +92,6 @@ class _PinputExampleState extends State<PinputExample> {
     );
 
     return Form(
-      // key: formKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

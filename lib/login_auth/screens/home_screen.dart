@@ -20,22 +20,21 @@ class _HomeScreenState extends State<HomeScreen> {
     var uri = Uri.parse(url);
     var response = await http.get(uri);
     var decode = jsonDecode(response.body);
+    log("Status code : ${response.statusCode.toString()}");
     setState(() {
       userData = decode;
     });
   }
 
-  Map<String, dynamic>? fecthPosts;
   List<dynamic>? post;
 
   getPosts() async {
     var url = getpostsURL;
     var uri = Uri.parse(url);
     var response = await http.get(uri);
+    log("Status code : ${response.statusCode.toString()}");
     if (response.statusCode == 200 || response.statusCode == 201) {
       var decode = jsonDecode(response.body)['data'] as List;
-      print(decode.toString());
-      log(decode.toString());
       setState(() {
         post = decode;
       });
@@ -58,19 +57,12 @@ class _HomeScreenState extends State<HomeScreen> {
         title: userData == null
             ? const Center(child: CircularProgressIndicator())
             : Text(
-                userData?['data']?['name'] ?? "",
+                'Hello, ${userData?['data']?['name'] ?? ""}',
                 style: const TextStyle(color: Colors.white),
               ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                getPosts();
-              },
-              icon: const Icon(Icons.replay)),
-        ],
       ),
       body: post == null
-          ? const CircularProgressIndicator()
+          ? const Center(child: CircularProgressIndicator())
           : Column(
               children: <Widget>[
                 Expanded(

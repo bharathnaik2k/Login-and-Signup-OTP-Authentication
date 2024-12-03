@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_auth/login_auth/api/api_address.dart';
 import 'package:login_auth/login_auth/screens/login_screen.dart';
+import 'package:login_auth/login_auth/screens/verify_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -31,7 +33,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
         "email": email.text.toString(),
       }),
     );
+    log("Status code : ${response.statusCode.toString()}");
     if (response.statusCode == 201) {
+      setState(() {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => OTPVerifyScreen(
+            mobileNumber: mobileNumber.text.toString(),
+          ),
+        ));
+      });
       var snackBar = const SnackBar(content: Text('OTP Sent Sccuessfull'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else if (response.statusCode == 400) {
@@ -154,7 +164,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       signUP();
                     } else {
                       var snackBar =
-                          const SnackBar(content: Text('Fill the Details'));
+                          const SnackBar(content: Text('Fill All Details'));
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
                   });
