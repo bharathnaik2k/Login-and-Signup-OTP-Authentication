@@ -94,8 +94,10 @@ class _HomeScreenState extends State<HomeScreen> {
             perToken = await SharedPreferences.getInstance();
             setState(() {
               perToken.setString("token", "null");
-              const LoginScreen();
             });
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            ));
           },
           style: const ButtonStyle(
               backgroundColor: MaterialStatePropertyAll(Colors.blue)),
