@@ -3,11 +3,15 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:login_auth/login_auth/api/api_address.dart';
+import 'package:login_auth/login_auth/api/jwt_token.dart';
+import 'package:login_auth/login_auth/screens/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String id;
-  const HomeScreen({super.key, required this.id});
+  final String token;
+  const HomeScreen({super.key, required this.token});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -15,8 +19,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Map<String, dynamic>? userData;
-  getUser() async {
-    var url = "https://api.yes-me.com/users/${widget.id}/details";
+
+  void getUser() async {
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(widget.token);
+    var id = decodedToken['sub'];
+    var url = "$baseUrl/users/$id/details";
     var uri = Uri.parse(url);
     var response = await http.get(uri);
     var decode = jsonDecode(response.body);
@@ -28,8 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<dynamic>? post;
 
-  getPosts() async {
-    var url = getpostsURL;
+  void getPosts() async {
+    var url = '$baseUrl$getpostsURL';
     var uri = Uri.parse(url);
     var response = await http.get(uri);
     log("Status code : ${response.statusCode.toString()}");
@@ -77,9 +84,27 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   ),
-                )
+                ),
               ],
             ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextButton(
+          onPressed: () async {
+            perToken = await SharedPreferences.getInstance();
+            setState(() {
+              perToken.setString("token", "null");
+              const LoginScreen();
+            });
+          },
+          style: const ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(Colors.blue)),
+          child: const Text(
+            "LogOut",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -3,10 +3,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:login_auth/login_auth/api/api_address.dart';
+import 'package:login_auth/login_auth/api/jwt_token.dart';
+import 'package:login_auth/login_auth/models/snackbar_message.dart';
 import 'package:login_auth/login_auth/screens/home_screen.dart';
 import 'package:pinput/pinput.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OTPVerifyScreen extends StatelessWidget {
   final String? mobileNumber;
@@ -45,7 +47,17 @@ class PinputExample extends StatefulWidget {
 class _PinputExampleState extends State<PinputExample> {
   TextEditingController pinController = TextEditingController();
 
-  verifyOTP() async {
+  void perTokenFUN() async {
+    perToken = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    perTokenFUN();
+    super.initState();
+  }
+
+  void verifyOTP() async {
     var url = "$baseUrl$verifyURL";
     var uri = Uri.parse(url);
     var response = await http.post(
@@ -59,16 +71,14 @@ class _PinputExampleState extends State<PinputExample> {
     if (response.statusCode == 200) {
       var decode = jsonDecode(response.body);
       var token = decode['data']['token'];
-      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-      var id = decodedToken['sub'];
+      perToken.setString("token", token.toString());
       setState(() {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => HomeScreen(id: id.toString()),
+          builder: (context) => HomeScreen(token: token),
         ));
       });
     } else {
-      var snackBar = const SnackBar(content: Text('Invild OTP'));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      snackBarMessage(context, "Invalid OTP");
     }
   }
 
@@ -143,8 +153,7 @@ class _PinputExampleState extends State<PinputExample> {
                   verifyOTP();
                 });
               } else {
-                var snackBar = const SnackBar(content: Text('Enter Valid OTP'));
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                snackBarMessage(context, "Enter Valid OTP");
               }
             },
             child: const Text(

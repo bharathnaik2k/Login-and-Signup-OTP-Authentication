@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:login_auth/login_auth/screens/home_screen.dart';
 import 'package:login_auth/login_auth/screens/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences perToken = await SharedPreferences.getInstance();
+  String? token = perToken.getString('token');
+  runApp(MyApp(
+    token: token,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String? token;
+  const MyApp({super.key, required this.token});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: (token != "null" && !JwtDecoder.isExpired(token!))
+          ? HomeScreen(token: token!)
+          : const LoginScreen(),
     );
   }
 }

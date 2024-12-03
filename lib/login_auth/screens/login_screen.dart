@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_auth/login_auth/api/api_address.dart';
+import 'package:login_auth/login_auth/models/snackbar_message.dart';
 import 'package:login_auth/login_auth/screens/signup_screen.dart';
 import 'package:login_auth/login_auth/screens/verify_screen.dart';
 import 'package:pinput/pinput.dart';
@@ -18,7 +19,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController mobileNumber = TextEditingController();
-  logIN() async {
+  void logIN() async {
     var url = "$baseUrl$signInURL";
     var uri = Uri.parse(url);
     var response = await http.post(
@@ -37,18 +38,14 @@ class _LoginScreenState extends State<LoginScreen> {
       var snackBar = const SnackBar(content: Text('OTP Sent Successfull'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else if (response.statusCode == 400) {
-      var snackBar =
-          const SnackBar(content: Text('User Does Not Exit. Create a Account'));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      snackBarMessage(context, "User Does Not Exit. Create a Account");
     } else {
-      var snackBar = SnackBar(content: Text('${response.statusCode}'));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      snackBarMessage(context, "${response.statusCode}");
     }
   }
 
-  fillNumberErorr() {
-    var snackBar = const SnackBar(content: Text('Enter The Correct Number'));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  void fillNumberErorr() {
+    snackBarMessage(context, "Enter Correct Number");
   }
 
   @override
