@@ -20,16 +20,6 @@ class OTPVerifyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 106, 255, 0),
-      appBar: AppBar(
-        elevation: 0,
-        title: const Text('Verify OTP'),
-        centerTitle: true,
-        titleTextStyle: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          color: Color.fromRGBO(30, 60, 87, 1),
-        ),
-      ),
       body: FractionallySizedBox(
         widthFactor: 1,
         child: PinputExample(mobileNumber: mobileNumber),
@@ -160,8 +150,8 @@ class _PinputExampleState extends State<PinputExample> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              height: 240,
-              width: 240,
+              height: 340,
+              width: 340,
               child: Image.asset("assets/image/otp.png"),
             ),
             const Text("Enter Your OTP"),

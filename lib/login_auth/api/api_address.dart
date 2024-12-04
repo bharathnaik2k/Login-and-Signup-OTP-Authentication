@@ -1,6 +1,6 @@
-const String baseUrl = "hide";
-const String signInURL = "hide";
-const String signUpURL = "hide";
-const String verifyURL = "hide";
-const String getUserURL = "hide";
-const String getpostsURL = "hide";
+const String baseUrl = "https://api.yes-me.com";
+const String signInURL = "/auth/signin";
+const String signUpURL = "/auth/signup";
+const String verifyURL = "/auth/phone/verify";
+const String getUserURL = "";
+const String getpostsURL = "/posts";

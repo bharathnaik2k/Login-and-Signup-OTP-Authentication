@@ -39,6 +39,7 @@ dependencies:
   pinput: ^5.0.0
   jwt_decoder: ^2.0.1
   shared_preferences: ^2.2.3
+  shimmer: ^3.0.0
   # smart_auth: ^2.0.0
 
 dev_dependencies:

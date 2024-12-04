@@ -1,36 +1,4 @@
-class GetPostModel {
-  String? status;
-  String? message;
-  List<Data>? data;
-  Null error;
-
-  GetPostModel({this.status, this.message, this.data, this.error});
-
-  GetPostModel.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    message = json['message'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(Data.fromJson(v));
-      });
-    }
-    error = json['error'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['status'] = status;
-    data['message'] = message;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    data['error'] = error;
-    return data;
-  }
-}
-
-class Data {
+class ListModelclass {
   String? id;
   String? createdAt;
   String? updatedAt;
@@ -43,7 +11,7 @@ class Data {
   Author? author;
   List<Medias>? medias;
 
-  Data(
+  ListModelclass(
       {this.id,
       this.createdAt,
       this.updatedAt,
@@ -56,7 +24,7 @@ class Data {
       this.author,
       this.medias});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  ListModelclass.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -66,31 +34,32 @@ class Data {
     status = json['status'];
     liked = json['liked'];
     totalLikes = json['total_likes'];
-    author = json['author'] != null ? Author.fromJson(json['author']) : null;
+    author =
+        json['author'] != null ? new Author.fromJson(json['author']) : null;
     if (json['medias'] != null) {
       medias = <Medias>[];
       json['medias'].forEach((v) {
-        medias!.add(Medias.fromJson(v));
+        medias!.add(new Medias.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    data['created_by'] = createdBy;
-    data['service_id'] = serviceId;
-    data['description'] = description;
-    data['status'] = status;
-    data['liked'] = liked;
-    data['total_likes'] = totalLikes;
-    if (author != null) {
-      data['author'] = author!.toJson();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    data['created_by'] = this.createdBy;
+    data['service_id'] = this.serviceId;
+    data['description'] = this.description;
+    data['status'] = this.status;
+    data['liked'] = this.liked;
+    data['total_likes'] = this.totalLikes;
+    if (this.author != null) {
+      data['author'] = this.author!.toJson();
     }
-    if (medias != null) {
-      data['medias'] = medias!.map((v) => v.toJson()).toList();
+    if (this.medias != null) {
+      data['medias'] = this.medias!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -110,10 +79,10 @@ class Author {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['photo_url'] = photoUrl;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['photo_url'] = this.photoUrl;
     return data;
   }
 }
@@ -150,19 +119,15 @@ class Medias {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    data['post_id'] = postId;
-    data['created_by'] = createdBy;
-    data['file_name'] = fileName;
-    data['url'] = url;
-    data['storage_path'] = storagePath;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    data['post_id'] = this.postId;
+    data['created_by'] = this.createdBy;
+    data['file_name'] = this.fileName;
+    data['url'] = this.url;
+    data['storage_path'] = this.storagePath;
     return data;
   }
 }
-
-//
-//
-//
