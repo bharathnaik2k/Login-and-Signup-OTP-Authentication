@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    getUser();
+    // getUser();
     getPosts();
     super.initState();
   }
@@ -59,6 +59,21 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(
+                Icons.account_circle_rounded,
+                color: Colors.white,
+                size: 38,
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            );
+          },
+        ),
         backgroundColor: Colors.blue,
         centerTitle: true,
         title: userData == null
@@ -67,6 +82,35 @@ class _HomeScreenState extends State<HomeScreen> {
                 'Hello, ${userData?['data']?['name'] ?? ""}',
                 style: const TextStyle(color: Colors.white),
               ),
+      ),
+      drawer: Drawer(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextButton(
+                onPressed: () async {
+                  perToken = await SharedPreferences.getInstance();
+                  setState(() {
+                    perToken.setString("token", "null");
+                  });
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const LoginScreen(),
+                  ));
+                },
+                style: const ButtonStyle(
+                    minimumSize:
+                        MaterialStatePropertyAll(Size(double.infinity, 40)),
+                    backgroundColor: MaterialStatePropertyAll(Colors.blue)),
+                child: const Text(
+                  "LogOut",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       body: post == null
           ? const Center(child: CircularProgressIndicator())

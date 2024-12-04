@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(fontFamily: "exo2_bold"),
       debugShowCheckedModeBanner: false,
       home: (token != "null" && !JwtDecoder.isExpired(token!))
           ? HomeScreen(token: token!)

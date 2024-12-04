@@ -54,6 +54,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 242, 255, 0),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -62,8 +63,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const SizedBox(height: 80),
-                  const Icon(Icons.account_box, size: 55),
+                  SizedBox(
+                    height: 170,
+                    width: 170,
+                    child: Image.asset("assets/image/signup.png"),
+                  ),
                   const SizedBox(height: 10),
                   const Text(
                     "Create Account",
@@ -80,6 +84,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hintStyle: TextStyle(
                         color: Color.fromARGB(255, 151, 151, 151),
                       ),
+                      filled: true,
+                      fillColor: Colors.white,
                       isDense: true,
                     ),
                   ),
@@ -95,6 +101,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hintStyle: TextStyle(
                         color: Color.fromARGB(255, 151, 151, 151),
                       ),
+                      fillColor: Color.fromARGB(255, 212, 212, 212),
                       filled: true,
                       isDense: true,
                     ),
@@ -116,6 +123,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hintStyle: TextStyle(
                         color: Color.fromARGB(255, 151, 151, 151),
                       ),
+                      filled: true,
+                      fillColor: Colors.white,
                       isDense: true,
                       prefixIcon: Padding(
                         padding: EdgeInsets.all(15),
@@ -140,6 +149,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hintStyle: TextStyle(
                         color: Color.fromARGB(255, 151, 151, 151),
                       ),
+                      filled: true,
+                      fillColor: Colors.white,
                       isDense: true,
                     ),
                   ),
