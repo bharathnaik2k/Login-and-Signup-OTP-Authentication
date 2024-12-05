@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_auth/login_auth/api/api_address.dart';
-import 'package:login_auth/login_auth/models/snackbar_message.dart';
 import 'package:login_auth/login_auth/screens/signup_screen.dart';
 import 'package:login_auth/login_auth/screens/verify_screen.dart';
+import 'package:login_auth/login_auth/widgets/snackbar_message.dart';
+import 'package:pinput/pinput.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -123,15 +124,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         const MaterialStatePropertyAll(Colors.blue),
                   ),
                   onPressed: () {
-                    // FocusManager.instance.primaryFocus?.unfocus();
-                    // setState(() {
-                    //   mobileNumber.length == 10 ? logIN() : fillNumberErorr();
-                    // });
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const OTPVerifyScreen(
-                        mobileNumber: "mobileNumber",
-                      ),
-                    ));
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    setState(() {
+                      mobileNumber.length == 10 ? logIN() : fillNumberErorr();
+                    });
                   },
                   child: const Text(
                     "Login",

@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_auth/login_auth/api/api_address.dart';
 import 'package:login_auth/login_auth/api/jwt_token.dart';
-import 'package:login_auth/login_auth/models/snackbar_message.dart';
 import 'package:login_auth/login_auth/screens/home_screen.dart';
+import 'package:login_auth/login_auth/widgets/snackbar_message.dart';
 import 'package:pinput/pinput.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -223,16 +223,13 @@ class _PinputExampleState extends State<PinputExample> {
                 backgroundColor: MaterialStatePropertyAll(Colors.blue),
               ),
               onPressed: () {
-                // if (pinController.text.length == 4) {
-                //   setState(() {
-                //     verifyOTP();
-                //   });
-                // } else {
-                //   snackBarMessage(context, "Enter Valid OTP");
-                // }
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const HomeScreen(token: "token"),
-                ));
+                if (pinController.text.length == 4) {
+                  setState(() {
+                    verifyOTP();
+                  });
+                } else {
+                  snackBarMessage(context, "Enter Valid OTP");
+                }
               },
               child: const Text(
                 '  Validate  ',
