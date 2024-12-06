@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:login_auth/login_auth/api/api_address.dart';
 import 'package:login_auth/login_auth/api/jwt_token.dart';
@@ -164,6 +165,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 1),
                     itemBuilder: (context, index) {
+                      DateTime dateValue = DateFormat("yyyy-MM-ddTHH:mm:ssZ")
+                          .parseUTC(_getPostsList[index].createdAt.toString())
+                          .toLocal();
+                      String formattedDate =
+                          DateFormat("hh:mm a dd MMM yyyy").format(dateValue);
                       return Card(
                         color: const Color.fromARGB(255, 255, 243, 109),
                         shape: RoundedRectangleBorder(
@@ -176,12 +182,40 @@ class _HomeScreenState extends State<HomeScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      color: Colors.white,
+                                      Icons.account_circle_outlined,
+                                      shadows: [
+                                        Shadow(
+                                            color: Colors.black, blurRadius: 10)
+                                      ],
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      _getPostsList[index]
+                                          .author!
+                                          .name
+                                          .toString(),
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
                                 _getPostsList[index].author!.photoUrl == null
                                     ? const CircularProgressIndicator()
                                     : Container(
-                                        height: 240,
+                                        height: 220,
                                         width: double.infinity,
                                         decoration: BoxDecoration(
+                                          color: const Color.fromARGB(
+                                              255, 230, 230, 230),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              blurRadius: 6,
+                                              spreadRadius: 1,
+                                            ),
+                                          ],
                                           borderRadius:
                                               BorderRadius.circular(5),
                                           image: DecorationImage(
@@ -198,6 +232,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   _getPostsList[index].description.toString(),
                                 ),
                                 Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     CircleAvatar(
                                       backgroundColor: Colors.white,
@@ -211,7 +247,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     const SizedBox(width: 10),
                                     Text(
-                                        '${_getPostsList[index].totalLikes.toString()} Likes')
+                                      '${_getPostsList[index].totalLikes.toString()} Likes',
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      '${formattedDate.substring(0, 8)} - ${formattedDate.substring(9, 20)}',
+                                      style: const TextStyle(
+                                        overflow: TextOverflow.fade,
+                                        color: Color.fromARGB(255, 0, 125, 174),
+                                        fontSize: 10.0,
+                                      ),
+                                    )
                                   ],
                                 )
                               ],

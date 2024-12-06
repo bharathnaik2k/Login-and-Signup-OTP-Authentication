@@ -40,6 +40,9 @@ dependencies:
   jwt_decoder: ^2.0.1
   shared_preferences: ^2.2.3
   shimmer: ^3.0.0
+  flutter_svg: ^2.0.10+1
+  cached_network_image: ^3.4.0
+  intl: ^0.20.0
   # smart_auth: ^2.0.0
 
 dev_dependencies:
